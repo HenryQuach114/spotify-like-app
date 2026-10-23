@@ -5,6 +5,9 @@ public class Song {
   private String name;
   private String artist;
   private String fileName;
+  private String genre;
+  private int year;
+  
 
   // serializes attributes into a string
   public String toString() {
@@ -34,4 +37,12 @@ public class Song {
   public String fileName() {
     return this.fileName;
   }
+
+  public String genre() {
+    return this.genre;
+  }
+  public int year() {
+    return this.year;
+  }
+
 }
