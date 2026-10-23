@@ -89,6 +89,13 @@ private static Scanner input = new Scanner(System.in);
         break;
       case "s":
         System.out.println("-->Search by title<--");
+        System.out.print("Enter a song title: ");
+        String title = input.nextLine();
+        for (int i = 0; i < library.length; i++) {
+          if (library[i].name().equalsIgnoreCase(title)) {
+            play(library, i);
+          }
+        }
         break;
       case "l":
         System.out.println("-->Library<--");
