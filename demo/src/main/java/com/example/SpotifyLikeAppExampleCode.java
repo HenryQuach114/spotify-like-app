@@ -97,7 +97,7 @@ private static Scanner input = new Scanner(System.in);
         break;
       case "p":
         System.out.println("-->Play<--");
-        play(library);
+        play(library, 3);
         break;
       case "q":
         System.out.println("-->Quit<--");
@@ -110,11 +110,10 @@ private static Scanner input = new Scanner(System.in);
   /*
    * plays an audio file
    */
-  public static void play(Song[] library) {
+  public static void play(Song[] library, int i) {
     // open the audio file
 
     // get the filePath and open a audio file
-    final Integer i = 3;
     final String filename = library[i].fileName();
     final String filePath = directoryPath + "/wav/" + filename;
     final File file = new File(filePath);
