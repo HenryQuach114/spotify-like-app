@@ -86,6 +86,8 @@ private static Scanner input = new Scanner(System.in);
     switch (userInput) {
       case "h":
         System.out.println("-->Home<--");
+        System.out.println("Welcome to the SpotifyLikeApp!");
+        System.out.println("You have " + library.length + " songs in your library.");
         break;
       case "s":
         System.out.println("-->Search by title<--");
