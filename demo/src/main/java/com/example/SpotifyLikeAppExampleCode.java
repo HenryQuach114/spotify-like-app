@@ -94,6 +94,9 @@ private static Scanner input = new Scanner(System.in);
         for (int i = 0; i < library.length; i++) {
           System.out.println((i + 1) + ". " + library[i].name() + " - " + library[i].artist());
         }
+        System.out.print("Enter the number of the song to play: ");
+        int songNumber = Integer.parseInt(input.nextLine());
+        play(library, songNumber - 1);
         break;
       case "p":
         System.out.println("-->Play<--");
