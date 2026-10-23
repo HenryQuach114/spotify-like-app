@@ -67,6 +67,7 @@ private static Scanner input = new Scanner(System.in);
    * displays the menu for the app
    */
   public static void menu() {
+    System.out.println();
     System.out.println("---- SpotifyLikeApp ----");
     System.out.println("[H]ome");
     System.out.println("[S]earch by title");
@@ -94,6 +95,7 @@ private static Scanner input = new Scanner(System.in);
         for (int i = 0; i < library.length; i++) {
           System.out.println((i + 1) + ". " + library[i].name() + " - " + library[i].artist());
         }
+        System.out.println();
         System.out.print("Enter the number of the song to play: ");
         int songNumber = Integer.parseInt(input.nextLine());
         play(library, songNumber - 1);
@@ -120,6 +122,12 @@ private static Scanner input = new Scanner(System.in);
     final String filename = library[i].fileName();
     final String filePath = directoryPath + "/wav/" + filename;
     final File file = new File(filePath);
+    System.out.println();
+    System.out.println("Now playing: " + library[i].name());
+    System.out.println("Artist: " + library[i].artist());
+    System.out.println("Year: " + library[i].year());
+    System.out.println("Genre: " + library[i].genre());
+    System.out.println("File: " + filePath);
 
     // stop the current song from playing, before playing the next one
     if (audioClip != null) {
