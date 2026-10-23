@@ -11,7 +11,7 @@ public class SpotifyLikeAppExampleCode {
 
   // the current audio clip
   private static Clip audioClip;
-
+private static Scanner input = new Scanner(System.in);
   /*
     *** IMPORTANT NOTE FOR ALL STUDENTS ***
 
@@ -44,9 +44,6 @@ public class SpotifyLikeAppExampleCode {
   public static void main(final String[] args) {
     // reading audio library from json file
     Song[] library = readAudioLibrary();
-
-    // create a scanner for user input
-    Scanner input = new Scanner(System.in);
 
     String userInput = "";
     while (!userInput.equals("q")) {
@@ -94,6 +91,9 @@ public class SpotifyLikeAppExampleCode {
         break;
       case "l":
         System.out.println("-->Library<--");
+        for (int i = 0; i < library.length; i++) {
+          System.out.println((i + 1) + ". " + library[i].name() + " - " + library[i].artist());
+        }
         break;
       case "p":
         System.out.println("-->Play<--");
