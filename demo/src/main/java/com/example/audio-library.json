@@ -33,5 +33,40 @@
     "year": 2021,
     "genre": "Hip Hop",
     "fileName": "lil-nas-x-crop.wav"
+  },
+  {
+    "name": "How to Write an 80s Sitcom",
+    "artist": "Dr Sparkles",
+    "year": 2021,
+    "genre": "Power-Pop",
+    "fileName": "80s-sitcom.wav"
+  },
+  {
+    "name": "Owl Eyes",
+    "artist": "The Pop Winds",
+    "year": 2010,
+    "genre": "Synth Pop",
+    "fileName": "owl-eyes.wav"
+  },
+  {
+    "name": "In the House",
+    "artist": "TimTaj",
+    "year": 2023,
+    "genre": "House",
+    "fileName": "in-the-house.wav"
+  },
+  {
+    "name": "Roof",
+    "artist": "Nctrnm",
+    "year": 2018,
+    "genre": "Trip-Hop",
+    "fileName": "roof.wav"
+  },
+  {
+    "name": "The Price Of Success",
+    "artist": "BoDleasons",
+    "year": 2024,
+    "genre": "Easy Listening",
+    "fileName": "price-of-success.wav"
   }
 ]
