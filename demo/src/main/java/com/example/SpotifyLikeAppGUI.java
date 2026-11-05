@@ -10,6 +10,7 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import javax.sound.sampled.*;
 import javax.swing.*;
 
 public class SpotifyLikeAppGUI {
@@ -38,6 +39,10 @@ public class SpotifyLikeAppGUI {
 
   // all the songs in the app
   private static List<Track> tracks = new ArrayList<>();
+
+  // the current audio clip and the song it belongs to
+  private static Clip audioClip;
+  private static Track nowPlaying;
 
   // parts of the window we need to update later
   private static JFrame frame;
@@ -126,6 +131,13 @@ public class SpotifyLikeAppGUI {
 
     JPanel top = new JPanel(new GridLayout(0, 1)); // one row of buttons per line
     top.add(menuRow);
+    JPanel playerRow = new JPanel(new FlowLayout(FlowLayout.LEFT));
+    playerRow.add(new JLabel("Player:"));
+    playerRow.add(makeButton("Play", () -> play()));
+    playerRow.add(makeButton("Pause", () -> pause()));
+    playerRow.add(makeButton("Stop", () -> stop()));
+    playerRow.add(makeButton("Rewind 5s", () -> rewind()));
+    top.add(playerRow);
     frame.add(top, BorderLayout.NORTH);
 
     // ---- Home screen: just the welcome message ----
@@ -256,7 +268,7 @@ public class SpotifyLikeAppGUI {
     showScreen("library");
     songList.setSelectedIndex(match);
     songList.ensureIndexIsVisible(match);
-    setStatus("Found: " + tracks.get(match).title);
+    playTrack(tracks.get(match));
   }
 
   private static void library() {
@@ -264,8 +276,101 @@ public class SpotifyLikeAppGUI {
     setStatus("Library");
   }
 
-  private static void quit() {
+    private static void quit() {
+    if (audioClip != null) {
+      audioClip.close();
+    }
     System.exit(0);
+  }
+
+  // ================================================================
+  //  PLAYER BUTTONS
+  // ================================================================
+
+  private static void play() {
+    Track selected = requireSelectedTrack();
+    if (selected == null) {
+      return;
+    }
+
+    boolean paused = (selected == nowPlaying && audioClip != null && !audioClip.isRunning());
+    if (paused) {
+      audioClip.loop(Clip.LOOP_CONTINUOUSLY); // continue where it left off
+      setNowPlaying("");
+    } else {
+      playTrack(selected);
+    }
+  }
+
+  private static void pause() {
+    if (audioClip != null && audioClip.isRunning()) {
+      audioClip.stop(); // stop() keeps the position, so Play resumes
+      setNowPlaying(" (paused)");
+    }
+  }
+
+  private static void stop() {
+    if (audioClip != null) {
+      audioClip.stop();
+      audioClip.setFramePosition(0); // go back to the start
+      setNowPlaying(" (stopped)");
+    }
+  }
+
+  private static void rewind() {
+    if (audioClip != null && audioClip.getMicrosecondLength() > 0) {
+      // the song loops, so the position can count past the end of the song;
+      // % (remainder) turns it back into a spot inside the song
+      long position = audioClip.getMicrosecondPosition() % audioClip.getMicrosecondLength();
+      long fiveSeconds = 5_000_000; // in microseconds
+      audioClip.setMicrosecondPosition(Math.max(position - fiveSeconds, 0));
+      setStatus("Rewound 5 seconds");
+    }
+  }
+
+  // plays an audio file (same idea as play() in the console app)
+  private static void playTrack(Track t) {
+    // the audio file lives in the wav folder next to audio-library.json
+    String fileName = new File(t.filePath).getName();
+    File file = new File(directoryPath + "/wav/" + fileName);
+
+    if (!file.exists()) {
+      JOptionPane.showMessageDialog(frame, "Can't find the audio file:\n" + file);
+      return;
+    }
+
+    // stop the current song before playing the next one
+    if (audioClip != null) {
+      audioClip.close();
+      audioClip = null;
+      nowPlaying = null;
+    }
+
+    try (AudioInputStream in = AudioSystem.getAudioInputStream(file)) {
+      Clip clip = AudioSystem.getClip();
+      clip.open(in); // loads the whole song into memory
+      clip.loop(Clip.LOOP_CONTINUOUSLY);
+
+      audioClip = clip;
+      nowPlaying = t;
+      setNowPlaying("");
+    } catch (Exception e) {
+      JOptionPane.showMessageDialog(frame, "Could not play the song:\n" + e.getMessage());
+    }
+  }
+
+  // updates the top line, e.g. "Now Playing: Roof - Nctrnm (paused)"
+  private static void setNowPlaying(String state) {
+    nowPlayingLabel.setText("Now Playing: " + nowPlaying.title + " - " + nowPlaying.artist + state);
+  }
+
+  // same as getSelectedTrack, but tells the user to pick a song if none is selected
+  private static Track requireSelectedTrack() {
+    Track selected = getSelectedTrack();
+    if (selected == null) {
+      JOptionPane.showMessageDialog(frame, "Pick a song from the library first.");
+    }
+    return selected;
   }
 
   // shows the clicked song's info (and its comments) on the right
