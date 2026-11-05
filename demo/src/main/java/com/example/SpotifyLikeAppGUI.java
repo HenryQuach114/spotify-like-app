@@ -1,6 +1,9 @@
 package com.example;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import java.util.HashMap;
+import java.util.Map;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.stream.JsonReader;
 import java.awt.*;
@@ -33,6 +36,9 @@ public class SpotifyLikeAppGUI {
 
   // the same folder, written relative to the root of the git repository
   private static final String REPO_FOLDER = "demo/src/main/java/com/example";
+
+    // the file where comments and favorites are saved
+  private static final String DATABASE_FILE = "track-database.json";
 
   // star symbol shown next to favorite songs
   private static final String STAR = "★";
@@ -84,13 +90,30 @@ public class SpotifyLikeAppGUI {
     System.out.println("ERROR: could not find audio-library.json");
   }
 
-  // reads the songs from audio-library.json and turns each one into a Track
+    /*
+   * Reads the songs from audio-library.json, then adds the saved
+   * comments and favorites from track-database.json (if it exists).
+   */
   private static void loadTracks() {
+    // 1. read the original library (same as the console app)
     Song[] library = readJson(new File(directoryPath, "audio-library.json"), Song[].class);
     if (library == null) {
       return; // nothing to load
     }
 
+    // 2. read the saved user settings, if we saved them before
+    Map<String, Track> saved = new HashMap<>();
+    File databaseFile = new File(directoryPath, DATABASE_FILE);
+    if (databaseFile.exists()) {
+      Track[] savedTracks = readJson(databaseFile, Track[].class);
+      if (savedTracks != null) {
+        for (Track t : savedTracks) {
+          saved.put(t.title, t);
+        }
+      }
+    }
+
+    // 3. combine them into one list of tracks
     for (Song song : library) {
       Track t = new Track();
       t.title = song.name();
@@ -99,7 +122,36 @@ public class SpotifyLikeAppGUI {
       t.genre = song.genre();
       t.filePath = REPO_FOLDER + "/wav/" + song.fileName();
       t.comments = "";
+
+      // if we saved settings for this song before, load them back
+      Track old = saved.get(t.title);
+      if (old != null) {
+        t.isFavorite = old.isFavorite;
+        if (old.comments != null) {
+          t.comments = old.comments;
+        }
+      }
+
       tracks.add(t);
+    }
+
+    // make sure the database file exists right away
+    saveDatabase();
+  }
+
+  // saves every track (with comments and favorites) to track-database.json
+  private static void saveDatabase() {
+    // never replace the saved settings with an empty list
+    if (tracks.isEmpty()) {
+      return;
+    }
+    File databaseFile = new File(directoryPath, DATABASE_FILE);
+    try (FileWriter writer = new FileWriter(databaseFile, StandardCharsets.UTF_8)) {
+      Gson gson = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
+      gson.toJson(tracks, writer);
+      setStatus("Saved to " + DATABASE_FILE);
+    } catch (Exception e) {
+      setStatus("ERROR: could not save " + DATABASE_FILE);
     }
   }
 
@@ -276,10 +328,11 @@ public class SpotifyLikeAppGUI {
     setStatus("Library");
   }
 
-    private static void quit() {
+  private static void quit() {
     if (audioClip != null) {
       audioClip.close();
     }
+    saveDatabase();
     System.exit(0);
   }
 

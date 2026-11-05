@@ -1,0 +1,92 @@
+[
+  {
+    "title": "Teach Me How to Dougie",
+    "artist": "Cali Swag District",
+    "year": 2010,
+    "genre": "Hip Hop",
+    "IsFavorite": false,
+    "comments": "",
+    "filePath": "demo/src/main/java/com/example/wav/dougie-crop.wav"
+  },
+  {
+    "title": "Could've Been (Tik Tok Remix)",
+    "artist": "H.E.R.",
+    "year": 2020,
+    "genre": "R&B",
+    "IsFavorite": false,
+    "comments": "",
+    "filePath": "demo/src/main/java/com/example/wav/her-crop.wav"
+  },
+  {
+    "title": "On Me",
+    "artist": "Lil Baby",
+    "year": 2020,
+    "genre": "Hip Hop",
+    "IsFavorite": false,
+    "comments": "",
+    "filePath": "demo/src/main/java/com/example/wav/lil-baby-crop.wav"
+  },
+  {
+    "title": "Mo Money Mo Problems",
+    "artist": "Notorios BIG",
+    "year": 1997,
+    "genre": "Hip Hop",
+    "IsFavorite": false,
+    "comments": "",
+    "filePath": "demo/src/main/java/com/example/wav/biggie-crop.wav"
+  },
+  {
+    "title": "Industry Baby",
+    "artist": "Lil Nas X",
+    "year": 2021,
+    "genre": "Hip Hop",
+    "IsFavorite": false,
+    "comments": "",
+    "filePath": "demo/src/main/java/com/example/wav/lil-nas-x-crop.wav"
+  },
+  {
+    "title": "How to Write an 80s Sitcom",
+    "artist": "Dr Sparkles",
+    "year": 2021,
+    "genre": "Power-Pop",
+    "IsFavorite": false,
+    "comments": "",
+    "filePath": "demo/src/main/java/com/example/wav/80s-sitcom.wav"
+  },
+  {
+    "title": "Owl Eyes",
+    "artist": "The Pop Winds",
+    "year": 2010,
+    "genre": "Synth Pop",
+    "IsFavorite": false,
+    "comments": "",
+    "filePath": "demo/src/main/java/com/example/wav/owl-eyes.wav"
+  },
+  {
+    "title": "In the House",
+    "artist": "TimTaj",
+    "year": 2023,
+    "genre": "House",
+    "IsFavorite": false,
+    "comments": "",
+    "filePath": "demo/src/main/java/com/example/wav/in-the-house.wav"
+  },
+  {
+    "title": "Roof",
+    "artist": "Nctrnm",
+    "year": 2018,
+    "genre": "Trip-Hop",
+    "IsFavorite": false,
+    "comments": "",
+    "filePath": "demo/src/main/java/com/example/wav/roof.wav"
+  },
+  {
+    "title": "The Price Of Success",
+    "artist": "BoDleasons",
+    "year": 2024,
+    "genre": "Easy Listening",
+    "IsFavorite": false,
+    "comments": "",
+    "filePath": "demo/src/main/java/com/example/wav/price-of-success.wav"
+  }
+]
