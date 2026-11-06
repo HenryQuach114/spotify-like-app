@@ -40,7 +40,7 @@
     "artist": "Lil Nas X",
     "year": 2021,
     "genre": "Hip Hop",
-    "IsFavorite": false,
+    "IsFavorite": true,
     "comments": "",
     "filePath": "demo/src/main/java/com/example/wav/lil-nas-x-crop.wav"
   },
@@ -50,7 +50,7 @@
     "year": 2021,
     "genre": "Power-Pop",
     "IsFavorite": false,
-    "comments": "",
+    "comments": "Terrible song, extremely annoying.",
     "filePath": "demo/src/main/java/com/example/wav/80s-sitcom.wav"
   },
   {

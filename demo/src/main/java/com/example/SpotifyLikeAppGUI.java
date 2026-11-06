@@ -58,6 +58,8 @@ public class SpotifyLikeAppGUI {
   private static JList<String> songList;
   private static JLabel nowPlayingLabel;
   private static JTextArea infoArea;
+  private static JTextArea commentBox;
+  private static JCheckBox favoriteBox;
   private static JLabel statusLabel;
 
   // "main" makes this class a java app that can be executed
@@ -219,7 +221,29 @@ public class SpotifyLikeAppGUI {
 
     JPanel right = new JPanel(new BorderLayout(0, 10));
     right.add(nowPlayingLabel, BorderLayout.NORTH);
-    right.add(infoScroll, BorderLayout.CENTER);
+
+    // under the song info: comment box + Favorite checkbox
+    commentBox = new JTextArea(4, 20);
+    commentBox.setLineWrap(true);
+    commentBox.setWrapStyleWord(true);
+    JScrollPane commentScroll = new JScrollPane(commentBox);
+
+    favoriteBox = new JCheckBox("Favorite");
+    favoriteBox.addActionListener(e -> toggleFavorite());
+
+    JPanel commentButtons = new JPanel(new FlowLayout(FlowLayout.LEFT));
+    commentButtons.add(favoriteBox);
+    commentButtons.add(makeButton("Save Comment", () -> saveComment()));
+
+    JPanel commentPanel = new JPanel(new BorderLayout());
+    commentPanel.setBorder(BorderFactory.createTitledBorder("Your comments on this song"));
+    commentPanel.add(commentScroll, BorderLayout.CENTER);
+    commentPanel.add(commentButtons, BorderLayout.SOUTH);
+
+    JPanel details = new JPanel(new GridLayout(2, 1, 0, 10));
+    details.add(infoScroll);
+    details.add(commentPanel);
+    right.add(details, BorderLayout.CENTER);
 
     JPanel libraryScreen = new JPanel(new GridLayout(1, 2, 10, 0));
     libraryScreen.add(listScroll);
@@ -229,6 +253,7 @@ public class SpotifyLikeAppGUI {
     songList.addListSelectionListener(e -> {
       if (!e.getValueIsAdjusting()) {
         showSelectedTrack();
+        showSelectedSettings();
       }
     });
 
@@ -479,6 +504,48 @@ public class SpotifyLikeAppGUI {
     // the window doesn't exist yet if this runs during startup
     if (statusLabel != null) {
       statusLabel.setText("  " + text);
+    }
+  }
+
+  // ================================================================
+  //  COMMENTS AND FAVORITES
+  // ================================================================
+
+  private static void saveComment() {
+    Track selected = requireSelectedTrack();
+    if (selected == null) {
+      return;
+    }
+    selected.comments = commentBox.getText().trim();
+    saveChanges();
+  }
+
+  private static void toggleFavorite() {
+    Track selected = requireSelectedTrack();
+    if (selected == null) {
+      favoriteBox.setSelected(false); // undo the click
+      return;
+    }
+    selected.isFavorite = favoriteBox.isSelected();
+    saveChanges();
+  }
+
+  // after a comment or favorite changes: save it and update the screen
+  private static void saveChanges() {
+    saveDatabase();
+    refreshList();
+    showSelectedTrack();
+  }
+
+  // puts the clicked song's comments and favorite into the comment box
+  private static void showSelectedSettings() {
+    Track selected = getSelectedTrack();
+    if (selected == null) {
+      commentBox.setText("");
+      favoriteBox.setSelected(false);
+    } else {
+      commentBox.setText(selected.comments);
+      favoriteBox.setSelected(selected.isFavorite);
     }
   }
 }
